@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useCallback } from 'react';
 import { Container, Table, Button, Spinner, Alert, Form } from 'react-bootstrap';
 import { Notyf } from 'notyf';
 import 'notyf/notyf.min.css';
@@ -22,44 +22,61 @@ export default function CartPage() {
     }
   }, [token]);
 
-  const fetchCart = async () => {
+    const fetchCart = useCallback(async () => {
     try {
       setLoading(true);
+
       if (!token) {
         setError("User not authenticated");
         return;
       }
 
-      const response = await fetch(`${process.env.REACT_APP_API_BASE_URL}/cart/get-cart`, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-          'Content-Type': 'application/json'
+      const response = await fetch(
+        `${process.env.REACT_APP_API_BASE_URL}/cart/get-cart`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+            'Content-Type': 'application/json'
+          }
         }
-      });
+      );
 
       console.log("Token being sent:", token);
 
       if (!response.ok) {
         let errorMessage = 'Failed to load cart';
+
         try {
           const errorData = await response.json();
           errorMessage = errorData.message || errorMessage;
         } catch (jsonErr) {
           console.warn("Could not parse error response:", jsonErr);
         }
+
         throw new Error(errorMessage);
       }
 
       const data = await response.json();
       console.log('Cart data:', data);
       setCart(data);
+
     } catch (err) {
       console.error("fetchCart error:", err);
       setError(err.message || "Unexpected error");
     } finally {
       setLoading(false);
     }
-  };
+  }, [token]);
+
+  useEffect(() => {
+    if (token) {
+      console.log("Token is available, fetching cart...");
+      fetchCart();
+    } else {
+      console.warn("Token not found, user might not be logged in.");
+      setLoading(false);
+    }
+  }, [token, fetchCart]);
 
   const updateQuantity = async (productId, newQty) => {
     try {

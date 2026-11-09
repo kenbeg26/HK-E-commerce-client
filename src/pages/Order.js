@@ -1,4 +1,5 @@
-import React, { useState, useEffect, useContext } from 'react';
+
+import React, { useState, useEffect, useContext, useCallback } from 'react';
 import UserContext from '../context/UserContext';
 import OrderAdminView from '../components/OrderAdminView';
 import OrderUserView from '../components/OrderUserView';
@@ -11,7 +12,7 @@ const Order = () => {
   const [retryCount, setRetryCount] = useState(0);
   const { user } = useContext(UserContext);
 
-  const fetchOrders = async () => {
+  const fetchOrders = useCallback(async () => {
     try {
       if (!user) {
         setLoading(false);
@@ -22,12 +23,15 @@ const Order = () => {
         ? '/orders/all-orders'
         : '/orders/my-orders';
 
-      const response = await fetch(`${process.env.REACT_APP_API_BASE_URL}${endpoint}`, {
-        headers: {
-          'Authorization': `Bearer ${localStorage.getItem('token')}`,
-          'Content-Type': 'application/json'
-        },
-      });
+      const response = await fetch(
+        `${process.env.REACT_APP_API_BASE_URL}${endpoint}`,
+        {
+          headers: {
+            'Authorization': `Bearer ${localStorage.getItem('token')}`,
+            'Content-Type': 'application/json'
+          },
+        }
+      );
 
       if (!response.ok) {
         const errorData = await response.json();
@@ -41,18 +45,18 @@ const Order = () => {
     } catch (err) {
       console.error('Fetch error:', err);
       setError(err.message);
-      // For specific error messages, you might want to handle differently
+
       if (err.message.includes('Unauthorized') || err.message.includes('token')) {
         // Handle token expiration or invalid token
       }
     } finally {
       setLoading(false);
     }
-  };
+  }, [user]);
 
   useEffect(() => {
     fetchOrders();
-  }, [user, retryCount]);
+  }, [fetchOrders, retryCount]);
 
   const handleRetry = () => {
     setLoading(true);
