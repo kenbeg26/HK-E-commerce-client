@@ -1,0 +1,117 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+/* AppNavbar.css */
+.nav-link-custom {
+    position: relative;
+    padding: 0.5rem 1rem;
+    margin: 0 0.25rem;
+    color: #333 !important;
+    font-weight: 500;
+    transition: all 0.3s ease;
+}
+
+.nav-link-custom::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    width: 0;
+    height: 2px;
+    background: linear-gradient(45deg, #FF6B6B, #FF8E53);
+    transition: all 0.3s ease;
+    transform: translateX(-50%);
+}
+
+.nav-link-custom:hover {
+    color: #FF6B6B !important;
+}
+
+.nav-link-custom:hover::after {
+    width: 80%;
+}
+
+.logo-icon {
+    font-size: 1.5rem;
+    transition: transform 0.3s ease;
+}
+
+.logo-text {
+    font-weight: 700;
+    background: linear-gradient(45deg, #FF6B6B, #FF8E53);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    transition: all 0.3s ease;
+}
+
+.navbar:hover .logo-icon {
+    transform: rotate(15deg);
+}
+
+.login-link {
+    background-color: rgba(255, 107, 107, 0.1);
+    border-radius: 20px;
+    margin-left: 0.5rem !important;
+}
+
+.login-link:hover {
+    background-color: rgba(255, 107, 107, 0.2) !important;
+}
+
+.logout-link {
+    background-color: rgba(255, 107, 107, 0.1);
+    border-radius: 20px;
+}
+
+.logout-link:hover {
+    background-color: rgba(255, 107, 107, 0.2) !important;
+}
+
+/* Mobile view adjustments */
+@media (max-width: 992px) {
+    .nav-link-custom {
+        margin: 0.25rem 0;
+        padding: 0.75rem 1rem;
+    }
+    
+    .nav-link-custom::after {
+        display: none;
+    }
+    
+    .login-link, .logout-link {
+        margin-top: 0.5rem !important;
+        display: inline-block;
+        width: fit-content;
+    }
+}
+
+.btn-hover-effect {
+  transition: all 0.3s ease;
+}
+
+.btn-hover-effect:hover {
+  background-color: #495968; /* Custom hover color */
+  color: #fff;
+  transform: scale(1.05);
+}
+
+.product-card {
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.product-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+}
+
+.image-container {
+    background-color: #f8f9fa;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+  
